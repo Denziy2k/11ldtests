@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Слово в слово</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#4b4b4b;--card:#fff;--ac:#58cc02;--acs:#58a700;--bl:#1cb0f6;--ok:#58a700;--bad:#ea2b2b;--mut:#afafaf;--line:#e5e5e5;--okbg:#d7ffb8;--badbg:#ffdfe0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131f24;--fg:#f1f7fb;--card:#131f24;--mut:#6b7c86;--line:#37464f;--okbg:#1d3a14;--badbg:#3d1a1c;--ok:#89e219;--bad:#ff7878}}
+:root[data-theme="dark"]{--bg:#131f24;--fg:#f1f7fb;--card:#131f24;--mut:#6b7c86;--line:#37464f;--okbg:#1d3a14;--badbg:#3d1a1c;--ok:#89e219;--bad:#ff7878}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:700}
+main{max-width:440px;margin:0 auto;padding:16px 18px 28px;text-align:center}
+.card{background:none;padding:0;box-shadow:none}
+h1{font-size:30px;font-weight:900;color:var(--ac);margin:8px 0 6px}
+.hero{font-size:84px;margin-top:40px}
+.m{color:var(--mut);font-size:16px;margin:4px 0 18px;line-height:1.4}
+button{font:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.big{width:100%;padding:15px;border-radius:16px;font-size:17px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:#fff;background:var(--ac);margin-top:12px;box-shadow:0 4px 0 var(--acs)}
+.big:active{transform:translateY(4px);box-shadow:none}
+.big.sec{background:var(--card);color:var(--bl);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.big.sec:active{box-shadow:none}
+.big:disabled{background:var(--line);color:var(--mut);box-shadow:none;transform:none;cursor:default}
+.bar{height:16px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;background:var(--ac);border-radius:9px;transition:width .4s;box-shadow:inset 0 5px 0 rgba(255,255,255,.25)}
+.word{font-size:44px;font-weight:900;margin:50px 0 60px;word-break:break-word;color:var(--fg)}
+.ans{min-height:70px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;align-items:center;padding:10px 0;border-top:2px solid var(--line);border-bottom:2px solid var(--line);margin:18px 0 22px}
+.ans span{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:6px 12px;font-size:26px;font-weight:900;box-shadow:0 3px 0 var(--line)}
+.ans .g{width:14px;border:0;box-shadow:none;background:none;padding:0}
+.ans.ok span{border-color:var(--ac);color:var(--ok);box-shadow:0 3px 0 var(--acs)}
+.ans.bad span{border-color:var(--bad);color:var(--bad);box-shadow:0 3px 0 var(--bad)}
+.ph{color:var(--mut);font-size:17px}
+.kb{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:10px}
+.k{min-width:54px;padding:12px 0;border-radius:14px;background:var(--card);color:var(--fg);font-size:24px;font-weight:900;border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.k:active{transform:translateY(4px);box-shadow:none}
+.k.w2{min-width:130px;font-size:16px}
+.row{display:flex;gap:10px}.row button{flex:1}
+.snd{background:var(--bl);color:#fff;width:60px;height:60px;border-radius:50%;font-size:26px;box-shadow:0 4px 0 #1899d6;margin:14px 0 0}
+.snd:disabled{opacity:.4;box-shadow:none;cursor:default}.snd:active{transform:translateY(4px);box-shadow:none}
+.fb{font-size:19px;font-weight:900;margin:0 0 10px;min-height:0;padding:0;border-radius:14px}
+.fb.ok{color:var(--ok);background:var(--okbg);padding:12px}.fb.bad{color:var(--bad);background:var(--badbg);padding:12px}
+.sc{font-size:56px;font-weight:900;margin:6px 0;color:var(--ac)}
+ul{list-style:none;padding:0;text-align:left;margin:0 0 8px}
+li{padding:11px 6px;border-bottom:2px solid var(--line);font-size:20px}
+.hero{font-size:56px;margin-top:8px}
+.lvs{display:grid;gap:8px;margin-bottom:8px}
+.lv{text-align:left;background:var(--card);color:var(--fg);border:2px solid var(--line);border-radius:16px;padding:11px 14px;box-shadow:0 3px 0 var(--line)}
+.lv b{display:block;font-size:18px;font-weight:900}.lv span{font-size:14px;color:var(--mut)}
+.lv.on{border-color:var(--bl);background:rgba(28,176,246,.12);box-shadow:0 3px 0 var(--bl)}
+.inp{width:100%;box-sizing:border-box;padding:14px;border:2px solid var(--line);border-radius:14px;font:inherit;background:var(--card);color:var(--fg);margin:14px 0 6px}
+.hint{border:2px solid var(--line);border-radius:16px;padding:16px;font-size:22px;margin:22px 0;line-height:1.3}
+.hint small{display:block;color:var(--mut);font-size:14px;margin-bottom:4px}
+.peek{background:none;color:var(--bl);font-size:16px;margin-top:12px}
+.pk{font-size:28px;min-height:38px;margin:6px 0 0}
+.snd{width:84px;height:84px;font-size:38px}
+li .m{margin:0;font-size:15px}li{display:flex;align-items:center;justify-content:space-between;gap:10px}.snd.sp{width:44px;height:44px;font-size:20px;margin:0;flex:none}
+</style></head><body><main id="app"></main>
+<script>
+const DATA="абажУр=колпак на лампе;абсолЮтный=полный, безусловный;авангАрд=передовая часть, новаторство;авантЮра=рискованная затея;авиациОнный=связанный с самолётами;автомобИль=машина на колёсах;агитАтор=тот, кто призывает поддержать идею;агрегАт=крупный узел из механизмов;агрессИвный=нападающий, враждебный;агронОм=специалист по земледелию;адвокАт=защитник в суде;адъютАнт=личный помощник офицера;акадЕмия=высшее научное учреждение;акварЕль=краски, разводимые водой;аккомпанемЕнт=музыка, что звучит вместе с солистом;аккордеОн=гармонь с клавишами;аккурАтный=опрятный, точный;акробАт=цирковой гимнаст;актуАльный=важный именно сейчас;алгорИтм=порядок действий для решения задачи;аллегОрия=иносказание в образе;аллергИя=болезненная реакция на что-то;аллЕя=дорожка с деревьями по бокам;альтернатИва=другой вариант выбора;алюмИний=лёгкий серебристый металл;амфИбия=земноводное животное;аналОгия=сходство, сопоставление;антагонИзм=непримиримая вражда;апеллЯция=обжалование решения;аплодИровать=хлопать в ладоши;аплодисмЕнты=хлопки зрителей;аппетИт=желание поесть;аргументИровать=приводить доводы;аромАт=приятный запах;артиллЕрия=пушки и орудия;асимметрИя=отсутствие одинаковости сторон;ассортимЕнт=набор разных товаров;ассоциАция=связь образов в мыслях;атмосфЕра=воздушная оболочка Земли;аттестАт=документ об окончании школы;аттракциОн=развлечение в парке;багрОвый=густо-красный;багрЯный=красный, как осенние листья;бакалАвр=первая степень в вузе;бакалЕя=крупы, чай, сахар в магазине;балагУр=шутник, весельчак;баллАда=стихотворный рассказ;бандерОль=упаковка для печатных изданий на почте;баррикАда=завал на улице во время боя;барьЕр=препятствие;бассЕйн=большая ёмкость для плавания;баталИя=сражение, схватка;батальОн=воинская часть;батарЕя=элемент питания или ряд орудий;баЯн=русская гармонь;бегемОт=огромное животное из африканских рек;без_прОмаху=точно в цель;без_просЫпу=непрерывно, без остановки;без_спрОса=без разрешения;без_Умолку=говорить не переставая;беллетрИстика=художественная литература;белорУс=житель Беларуси;белорУска=жительница Беларуси;белорУсский=относящийся к Беларуси;бензИн=топливо для машины;берЕт=мягкая круглая шапочка;бессОнница=невозможность уснуть;бетОн=строительная смесь с цементом;бечЁвка=тонкая верёвочка;бЕшеный=неистовый, разъярённый;бидОн=ёмкость для молока;бизнесмЕн=предприниматель;бифштЕкс=жареный кусок мяса;блестЕть=сверкать, сиять;блистАть=выделяться, сиять талантом;бокАл=стеклянный сосуд на ножке;бордЮр=каменный край дороги;бравАда=хвастливая показная храбрость;бриллиАнт=огранённый алмаз;брошЮра=тонкая книжка-буклет;в_диковинку=очень необычно, в новинку;в_обнИмку=крепко прижавшись;в_сердцАх=в порыве гнева;вакцИна=прививка от болезни;варЕник=украинское блюдо: тесто с начинкой;вАренный=приготовленный в кипятке кем-то (причастие);варЁный=приготовленный в кипятке (признак предмета);ввОлю=свободно, без ограничений;вдогОнку=вслед за кем-то;вентилЯция=подача свежего воздуха;веренИца=длинный ряд;вермишЕль=тонкие макароны;вернисАж=открытие выставки;вестибЮль=входной зал;ветерАн=бывалый участник событий;ветчинА=копчёное свиное мясо;взахлЁб=с жадностью, взволнованно;взимАть=собирать плату;винегрЕт=салат из свёклы;виртуОз=мастер высшего уровня;витрИна=стеклянное окно магазина с товаром;вначАле=сперва;возражАть=говорить против;вокзАл=здание, откуда отправляются поезда;воображЕние=способность придумывать;воспитЫвать=растить и учить;впечатлЕние=след, оставленный событием;вплАвь=переплывая воду;впослЕдствии=позднее, потом;вприпрЫжку=скача, подпрыгивая;впритИрку=очень тесно;впрОк=на будущее, про запас;вразбИвку=не подряд, вразнобой;врасплОх=неожиданно;вслАсть=вдоволь, сколько хочется;вслУх=громко, чтобы слышали;всмЯтку=о яйце: не до конца сваренное;всухомЯтку=есть без питья;втАйне=скрытно;вЫздороветь=снова стать здоровым;вьЮга=сильная снежная буря;вьЮчить=нагружать поклажей животное;габарИт=внешние размеры;газЕта=печатное издание с новостями;газОн=ровный участок травы;галерЕя=длинный коридор или собрание картин;гарАж=помещение для машины".split(";").map(x=>x.split("="));
+const RAW=DATA.map(x=>x[0]),D=Object.fromEntries(DATA);
+const app=document.getElementById('app');
+const TG=window.Telegram&&Telegram.WebApp;
+if(TG){try{TG.ready();TG.expand();if(TG.colorScheme)document.documentElement.dataset.theme=TG.colorScheme;}catch(e){}}
+const isU=c=>c!==c.toLowerCase();
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const plain=w=>w.toLowerCase().replace(/_/g,' ');
+const disp=w=>[...w].map(c=>c==='Ё'?'ё':isU(c)?c.toLowerCase()+'\u0301':c==='_'?' ':c).join('');
+const LV=[{n:'Лёгкий',e:'🌱',d:'Слово можно смотреть сколько угодно'},{n:'Средний',e:'🌿',d:'Слово видно всего 1 секунду'},{n:'Сложный',e:'🔊',d:'Только звук, слова не видно'},{n:'Хард',e:'🔥',d:'Только смысл слова простыми словами'}];
+let lv=0,q=[],i=0,wrong=[],all=0,ans='',lock=false;
+function home(){
+ app.innerHTML=`<div class="hero">📝</div><h1>Слово в слово</h1><p class="m" style="margin-bottom:10px">Русский язык · 11ЛД<br>Выбери уровень</p>
+ <div class="lvs">${LV.map((l,k)=>`<button class="lv ${k===lv?'on':''}" onclick="lv=${k};home()"><b>${l.e} ${l.n}</b><span>${l.d}</span></button>`).join('')}</div>
+ <button class="big" onclick="start(10)">Начать</button>
+ <button class="big sec" onclick="start(25)">25 слов</button>
+ <button class="big sec" onclick="start(999)">Все ${RAW.length} слов</button>
+ <button class="big sec" onclick="dict()">📖 Словарь</button>`;
+}
+function dict(){app.innerHTML=`<button class="big sec" onclick="home()">← Назад</button><input id="s" class="inp" placeholder="Поиск слова" oninput="fl()"><p class="m" style="margin:0">Нажми 🔊, чтобы услышать слово</p><ul id="dl"></ul>`;fl();}
+function fl(){const t=document.getElementById('s').value.toLowerCase();document.getElementById('dl').innerHTML=RAW.filter(w=>plain(w).includes(t)).map(w=>`<li><div><b>${disp(w)}</b><br><span class="m">${D[w]}</span></div><button class="snd sp" ${ttsOK()?'':'disabled'} onclick="say('${w}')">🔊</button></li>`).join('');}
+function start(n,list){q=shuf(list||RAW).slice(0,n);i=0;wrong=[];all=q.length;next();}
+function bar(){return `<div class="bar"><i style="width:${i/q.length*100}%"></i></div><p class="m" style="margin-bottom:0">${i+1} из ${q.length}</p>`;}
+function next(){stopSpeech();if(i>=q.length)return end();[memo,flash,build,build][lv]();}
+function memo(){app.innerHTML=`<div class="card">${bar()}<div class="word" style="margin-bottom:14px">${disp(q[i])}</div><p class="m" style="margin-bottom:40px">${D[q[i]]}</p><button class="big" onclick="build()">Скрыть и писать</button></div>`;}
+function flash(){app.innerHTML=`<div class="card">${bar()}<p class="m" style="margin-top:28px">Запомни!</p><div class="word">${disp(q[i])}</div></div>`;setTimeout(build,1000);}
+function build(){
+ ans='';lock=false;
+ const w=plain(q[i]),have=[...new Set(w.replace(/ /g,''))];
+ const extra=shuf([...'аеиоуыснтрлкв'].filter(c=>!have.includes(c))).slice(0,3);
+ const keys=shuf(have.concat(extra)).map(c=>`<button class="k" onclick="add('${c}')">${c}</button>`).join('')+(w.includes(' ')?'<button class="k w2" onclick="add(\' \')">пробел</button>':'');
+ const nosnd=lv===2&&!ttsOK();
+ const top=nosnd?`<button class="snd" disabled>🔊</button><div class="hint"><small>Звук не работает здесь, поэтому вот смысл слова</small>${D[q[i]]}</div>`:lv===2?`<button class="snd" onclick="say()">🔊</button><p class="m" style="margin:8px 0 0">${ttsOK()?'Послушай и собери слово':'Звук не работает на этом устройстве'}</p>`
+  :lv===3?`<div class="hint"><small>Что это значит</small>${D[q[i]]}</div>`
+  :`<button class="peek" onclick="peek()">👁 Подсмотреть</button><div class="pk" id="pk"></div>`;
+ app.innerHTML=`<div class="card">${bar()}${top}
+ <div class="ans" id="ans"></div><div class="fb" id="fb"></div><div class="kb">${keys}</div>
+ <div class="row"><button class="big sec" onclick="del()">⌫</button><button class="big" style="flex:3" id="chk" disabled onclick="check()">Проверить</button></div><div id="nx"></div></div>`;
+ draw();if(lv===2)setTimeout(()=>say(),300);
+}
+function peek(){const p=document.getElementById('pk');p.textContent=p.textContent?'':disp(q[i]);}
+function draw(cls){
+ const a=document.getElementById('ans');a.className='ans '+(cls||'');
+ const c=document.getElementById('chk');if(c)c.disabled=!ans.trim();
+ a.innerHTML=ans?[...ans].map(c=>c===' '?'<span class="g"></span>':`<span>${c}</span>`).join(''):'<b class="ph">Нажимай на буквы</b>';
+}
+function add(c){if(lock)return;ans+=c;draw();}
+function del(){if(lock)return;ans=ans.slice(0,-1);draw();}
+const LANG='ru-RU';
+const ttsOK=()=>'speechSynthesis' in window&&typeof SpeechSynthesisUtterance!=='undefined';
+let VOICES=[];
+if(ttsOK()){const lv_=()=>{VOICES=speechSynthesis.getVoices();};lv_();speechSynthesis.onvoiceschanged=lv_;}
+function speakWord(word,language){
+ language=language||LANG;
+ if(!ttsOK()||!word)return false;
+ try{
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(word);
+  u.lang=language;u.rate=0.85;u.pitch=1;
+  const vs=VOICES.length?VOICES:speechSynthesis.getVoices(),L=language.toLowerCase();
+  const c=vs.filter(x=>{const l=x.lang.toLowerCase().replace('_','-');return l.startsWith(L)||l.startsWith(L.slice(0,2));});
+  const sc=x=>(/Google|Natural|Enhanced|Premium|Online|Milena|Yandex|Svetlana|Dmitry|Pavel|Katya|Yuri/i.test(x.name)?2:0)+(x.localService?0:1);
+  const v=c.sort((a,b)=>sc(b)-sc(a))[0];
+  if(v)u.voice=v;
+  speechSynthesis.speak(u);return true;
+ }catch(e){return false;}
+}
+function stopSpeech(){try{if(ttsOK())speechSynthesis.cancel();}catch(e){}}
+const PRON={'берЕт':'бэрЭт'};
+function say(w){const k=w||q[i];speakWord(disp(PRON[k]||k),LANG);}
+function check(){
+ if(lock||!ans.trim())return;lock=true;
+ const w=plain(q[i]),fb=document.getElementById('fb');
+ if(ans.trim()===w){draw('ok');fb.className='fb ok';fb.textContent='Верно! 🎉';setTimeout(()=>{i++;next();},900);}
+ else{wrong.push(q[i]);draw('bad');fb.className='fb bad';fb.innerHTML=`Правильно: <b>${disp(q[i])}</b>`;
+  document.getElementById('nx').innerHTML='<button class="big" onclick="i++;next()">Дальше</button>';}
+}
+function end(){
+ const ok=all-wrong.length;
+ app.innerHTML=`<div class="card"><div class="hero">${ok===all?'🏆':'💪'}</div><div class="sc">${ok} из ${all}</div>
+ <p class="m">${ok===all?'Без единой ошибки!':'Слова, в которых были ошибки:'}</p>
+ <ul>${wrong.map(w=>`<li>${disp(w)}<br><span class="m">${D[w]}</span></li>`).join('')}</ul>
+ ${wrong.length?'<button class="big" onclick="start(999,wrong.slice())">Повторить ошибки</button>':''}
+ <button class="big sec" onclick="home()">В начало</button></div>`;
+}
+home();
+</script></body></html>
